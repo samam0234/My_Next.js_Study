@@ -1,0 +1,41 @@
+# dependencies
+**/node_modules/
+
+# next.js
+**/.next/
+**/.turbo/
+**/out/
+
+# build
+**/dist/
+**/build/
+**/*.tsbuildinfo
+
+# env
+**/.env
+**/.env.*
+!**/.env.example
+
+# db / local data dumps
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+
+# uploaded files
+**/uploads/*
+!**/uploads/.gitkeep
+
+# test / coverage
+**/coverage/
+
+# logs
+**/npm-debug.log*
+**/*.log
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+
+# OS
+.DS_Store
+Thumbs.db
