@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f1e3;
+  --foreground: #1b2838;
+  --card: #fffaf0;
+  --ink: #3b4d61;
+  --rule: #d7cbb8;
+  --mark: #b45309;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-rule: var(--rule);
+  --color-mark: var(--mark);
+  --font-sans: var(--font-noto);
+}
+
+body {
+  background: var(--background);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 27px,
+    rgba(215, 203, 184, 0.45) 28px
+  );
+  color: var(--foreground);
+  font-family: var(--font-noto), "Malgun Gothic", sans-serif;
+}
