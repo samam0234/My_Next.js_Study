@@ -1,40 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { createPostAction, updatePostAction } from "@/app/actions/posts";
+import { SubmitButton } from "@/app/ui/submit-button";
 
 export function PostForm({ post }) {
-  const router = useRouter();
-  const [error, setError] = useState("");
-  const [pending, setPending] = useState(false);
-
-  async function onSubmit(event) {
-    event.preventDefault();
-    setError("");
-    setPending(true);
-    const form = new FormData(event.currentTarget);
-    const payload = {
-      title: String(form.get("title") ?? ""),
-      body: String(form.get("body") ?? ""),
-    };
-    const response = await fetch(post ? `/api/posts/${post.id}` : "/api/posts", {
-      method: post ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    setPending(false);
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      setError(data.error ?? "저장에 실패했습니다.");
-      return;
-    }
-    const data = await response.json();
-    router.push(`/posts/${data.post.id}`);
-    router.refresh();
-  }
+  const action = post ? updatePostAction.bind(null, post.id) : createPostAction;
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-3">
+    <form action={action} className="flex flex-col gap-3">
       <label className="flex flex-col gap-1 text-sm">
         제목
         <input
@@ -54,14 +25,7 @@ export function PostForm({ post }) {
           className="rounded-lg border border-line bg-white px-3 py-2"
         />
       </label>
-      {error ? <p className="text-sm text-red-700">{error}</p> : null}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-fg disabled:opacity-60"
-      >
-        {pending ? "저장 중…" : post ? "수정" : "등록"}
-      </button>
+      <SubmitButton label={post ? "수정" : "등록"} />
     </form>
   );
 }
