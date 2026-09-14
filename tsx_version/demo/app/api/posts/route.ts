@@ -1,6 +1,21 @@
 import { NextResponse } from "next/server";
-import { SAMPLE_POSTS } from "@/lib/sample-posts";
+import { createPost, listPosts } from "@/lib/posts-store";
 
 export async function GET() {
-  return NextResponse.json({ posts: SAMPLE_POSTS });
+  const posts = await listPosts();
+  return NextResponse.json({ posts });
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = (await request.json()) as { title?: string; body?: string };
+    const post = await createPost({
+      title: body.title ?? "",
+      body: body.body ?? "",
+    });
+    return NextResponse.json({ post }, { status: 201 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "잘못된 요청";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
 }

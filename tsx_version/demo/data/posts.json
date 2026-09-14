@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "title": "App Router는 폴더가 URL이다",
+    "body": "app/posts/page.tsx 가 /posts 가 됩니다. 서버 컴포넌트가 이 JSON 파일을 직접 읽습니다.",
+    "createdAt": "2026-09-14T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "외부 API와 서버 DB는 위치가 다르다",
+    "body": "같은 서버 컴포넌트에서 JSON 파일을 읽을 수도 있고, fetch로 jsonplaceholder를 부를 수도 있습니다.",
+    "createdAt": "2026-09-14T00:01:00.000Z"
+  }
+]
