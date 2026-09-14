@@ -314,7 +314,7 @@ React를 JS로 먼저 배운 사람은 `jsx_version/demo`를, TS가 익숙하면
 | URL → 화면 | `<Route path>` | (해당 없음, API만) | `app/.../page.tsx` |
 | 공통 껍데기 | 레이아웃 컴포넌트 | — | `layout.tsx` |
 | REST 엔드포인트 | 없음 (axios로 남의 서버) | `@Controller` + `@Get` | `app/api/.../route.ts` |
-| 요청 가드 | Router `loader` / 직접 분기 | `AuthGuard` | `middleware.ts` + 서버에서 쿠키 |
+| 요청 가드 | Router `loader` / 직접 분기 | `AuthGuard` | `proxy.ts`(구 middleware) + 서버에서 쿠키 |
 | 폼 제출 | `onSubmit` + `fetch` | DTO + Pipe | Server Action 또는 Route Handler |
 | HTML 먼저 주기 | 못 함 (CSR) | 템플릿 엔진을 따로 쓸 때 | 서버 컴포넌트 SSR |
 | DI 컨테이너 | 없음 | `@Injectable` | 없음. 모듈에서 함수를 import |

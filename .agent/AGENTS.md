@@ -13,7 +13,7 @@
 - `study0.md`, `study1.md`, `study2.md`, ... 순서로 학습 진도가 진행됩니다. (숫자가 클수록 최신 진도)
   - `study0`: 실습 없이 이론만 (App Router, Server/Client Component, 렌더링 모델, SPA·Nest와의 비교)
   - `study1` ~ `study5`: Next.js 기본기 실습 (생성·명령어, App Router 라우팅, Server vs Client, 특수 파일·Route Handler, 데이터 페치와 게시판 CRUD)
-  - `study6` ~ `study10`: 고급 기술 구현 (JWT 쿠키 인증, Server Actions, 미들웨어 인가, 환경 변수·이미지·메타데이터, 빌드·배포)
+  - `study6` ~ `study10`: 고급 기술 구현 (JWT 쿠키 인증, Server Actions, proxy 인가, 환경 변수·이미지·메타데이터, 빌드·배포)
   - `studyFinal`: 지금까지 배운 것을 응용하되 **구조를 다르게** 설계한 최종 미니 웹사이트 (학습 노트 앱, `src/` + feature 폴더 + `node:sqlite`)
 - JSX와 TSX를 **같은 진도로 둘 다** 만듭니다.
   - `jsx_version/demo`, `jsx_version/project` — JavaScript (`.js` / `.jsx`)
