@@ -1,0 +1,8 @@
+[
+  {
+    "id": "u1",
+    "email": "demo@example.com",
+    "name": "데모",
+    "passwordHash": "$2b$10$yo9SDHd5Z9e7eftxzUaffel03P6zWkBbD6x3sr/kHy/9GkSe0ltPi"
+  }
+]
