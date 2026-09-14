@@ -1,7 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeletePostButton } from "@/app/ui/delete-post-button";
 import { getPost } from "@/lib/posts-store";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getPost(id);
+  if (!post) {
+    return { title: "글을 찾을 수 없음" };
+  }
+  return {
+    title: post.title,
+    description: post.body.slice(0, 80),
+  };
+}
 
 export default async function PostPage({
   params,

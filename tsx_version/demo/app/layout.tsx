@@ -10,7 +10,10 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js 실습 데모",
+  title: {
+    default: "Next.js 실습 데모",
+    template: "%s · Next.js 실습",
+  },
   description: "App Router 기초부터 게시판·로그인까지 한 프로젝트에서 실습합니다.",
 };
 

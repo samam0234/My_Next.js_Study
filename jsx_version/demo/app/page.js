@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -9,6 +10,14 @@ export default function HomePage() {
         <p className="text-xs font-semibold uppercase tracking-widest text-accent">
           study1
         </p>
+        <Image
+          src="/next.svg"
+          alt="Next.js"
+          width={96}
+          height={20}
+          className="mb-3"
+          priority
+        />
         <h1 className="mt-2 text-3xl font-bold tracking-tight">
           Next.js에 오신 것을 환영합니다
         </h1>
