@@ -1,5 +1,5 @@
 import { Noto_Sans_KR } from "next/font/google";
-import Link from "next/link";
+import { SiteHeader } from "@/app/ui/site-header";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -17,23 +17,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <header className="border-b border-line bg-stone-900 text-stone-50">
-          <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-sm font-semibold tracking-tight">
-              Next.js 실습 데모
-            </Link>
-            <nav className="flex gap-4 text-sm text-stone-300">
-              <Link href="/" className="hover:text-white">
-                홈
-              </Link>
-            </nav>
-          </div>
-        </header>
+        <SiteHeader />
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-8">
           {children}
         </main>
         <footer className="border-t border-line px-4 py-4 text-center text-xs text-stone-500">
-          study1 · App Router · jsx_version/demo
+          study2 · App Router · jsx_version/demo
         </footer>
       </body>
     </html>

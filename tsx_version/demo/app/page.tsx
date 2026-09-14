@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   const renderedAt = new Date().toISOString();
 
@@ -32,11 +34,26 @@ export default function HomePage() {
       </section>
 
       <section className="rounded-2xl border border-line bg-card p-6 shadow-sm">
-        <h2 className="text-lg font-semibold">다음 실습에서 추가할 것</h2>
+        <h2 className="text-lg font-semibold">study2에서 열린 주소</h2>
         <ul className="mt-3 list-disc space-y-1 pl-5 leading-7 text-stone-600">
-          <li>중첩 라우트와 동적 세그먼트</li>
-          <li>Client Component로 버튼 상태 다루기</li>
-          <li>게시판 CRUD와 로그인</li>
+          <li>
+            <Link className="text-accent underline" href="/about">
+              /about
+            </Link>{" "}
+            정적 페이지
+          </li>
+          <li>
+            <Link className="text-accent underline" href="/hello/next">
+              /hello/[name]
+            </Link>{" "}
+            동적 세그먼트
+          </li>
+          <li>
+            <Link className="text-accent underline" href="/posts">
+              /posts
+            </Link>{" "}
+            중첩 레이아웃 + 목록 / 상세
+          </li>
         </ul>
       </section>
     </article>
