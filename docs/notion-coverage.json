@@ -1,0 +1,40 @@
+{
+  "source": "https://app.notion.com/p/3d6d7dec5e2e81afb534c64042625cc6",
+  "readAt": "2026-11-23",
+  "relatedSources": [
+    "https://app.notion.com/p/3d6d7dec5e2e8139adbfd36dd506c65e",
+    "https://app.notion.com/p/40bd7dec5e2e81dab88fda4b558aa498",
+    "https://app.notion.com/p/40bd7dec5e2e818d9c91c6fb26dccc4c",
+    "https://app.notion.com/p/40bd7dec5e2e81f5af33fa01a3b473c1"
+  ],
+  "checklist": [
+    { "text": "App Router 디렉터리 구조", "study": "4" },
+    { "text": "Server Component vs Client Component", "study": "2" },
+    { "text": "`page.tsx` / `layout.tsx` / `loading.tsx` / `error.tsx`", "study": "4" },
+    { "text": "Route Handler (`app/api`)", "study": "4" },
+    { "text": "데이터 패칭 (서버에서 DB vs 외부 API)", "study": "6" },
+    { "text": "인증 (쿠키 / NextAuth 또는 직접 JWT)", "study": "7" },
+    { "text": "환경 변수, 배포", "study": "10" }
+  ],
+  "excluded": [
+    "대표 조합 3번(Next.js + Nest.js + PostgreSQL): 이 앱의 게시판을 Nest API(스펙 v1)로 분리",
+    "단일(Next만)과 분리(Next + Nest)의 인증 쿠키 위치 차이 기록",
+    "[React Router 7](https://app.notion.com/p/40bd7dec5e2e81448f49d0bbc16afe06)으로 같은 게시판 만들어 loader/action을 Server Component·Server Action과 비교"
+  ],
+  "exclusionReason": "사용자가 이번 작업에서 다른 프레임워크와 비교·통합하지 말라고 명시하여 실행하지 않음. 원문은 노션에 보존하고 studyFinal 마지막에 수록.",
+  "contentCoverage": [
+    { "topic": "라우팅·중첩 layout·동적 params·Route Group·특수 파일", "studies": ["2", "4", "Final"] },
+    { "topic": "서버/클라이언트 경계·직렬화 props·Server Action", "studies": ["2", "7", "8"] },
+    { "topic": "서버 DB 직접 읽기·외부 API fetch·환경변수", "studies": ["0", "6", "8", "10"] },
+    { "topic": "JWT·HttpOnly·proxy 안내·서명·소유권·비밀키", "studies": ["7", "9", "Final"] },
+    { "topic": "기존 src/feature SQLite 학습 노트 코드", "studies": ["Final"], "note": "기존 코드 보존, 신규 v1 게시판·문서 서비스는 /board와 /workbench" },
+    { "topic": "공통 API v1 전체 경로·상태·본문·헤더·쿼리·댓글", "studies": ["5", "6", "7", "9", "14"] },
+    { "topic": "DocuForge 문서 입력·요약·질문·근거 요구", "studies": ["18", "Final"], "note": "기능 주제만 연결, 기존 다중 프레임워크 서비스 호출 없음. PDF·벡터 RAG는 미구현 범위 명시" },
+    { "topic": "ReviewForge 기존 프로젝트 사용 기록", "studies": ["18"], "note": "노션 원문 이력 보존, 다른 백엔드 연결·스택 비교는 이번 요청 범위에서 제외" }
+  ],
+  "corrections": [
+    "원문의 proxy 전환 시점 '16.3 이후'는 설치된 공식 가이드 기준 'Next.js 16부터'로 정정.",
+    "기존 middleware.ts 설명·문서 진도표는 새 study0~18·studyMidpoint·studyFinal 표로 갱신.",
+    "기존 노션의 완료 체크는 학습 이력으로 보존하며, 신규 운영 체크는 실검증 전 체크하지 않음."
+  ]
+}
