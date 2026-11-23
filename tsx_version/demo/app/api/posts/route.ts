@@ -1,27 +1,6 @@
-import { NextResponse } from "next/server";
-import { createPost, listPosts } from "@/lib/posts-store";
-import { getSession } from "@/lib/session";
-
-export async function GET() {
-  const posts = await listPosts();
-  return NextResponse.json({ posts });
-}
-
-export async function POST(request: Request) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
-  }
-  try {
-    const body = (await request.json()) as { title?: string; body?: string };
-    const post = await createPost({
-      title: body.title ?? "",
-      body: body.body ?? "",
-      authorName: session.name,
-    });
-    return NextResponse.json({ post }, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "잘못된 요청";
-    return NextResponse.json({ error: message }, { status: 400 });
-  }
-}
+import { handle } from '@/course/api';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+// Next의 두 번째 인자(context)를 내부 extension 콜백으로 넘기지 않는다.
+function dispatch(request: Request) { return handle(request); }
+export { dispatch as GET, dispatch as POST, dispatch as PATCH, dispatch as DELETE, dispatch as OPTIONS, dispatch as PUT };
