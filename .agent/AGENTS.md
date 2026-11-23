@@ -3,7 +3,19 @@
 이 문서는 이 저장소에서 작업하는 모든 AI 에이전트(Claude, Grok, Codex 등)가 **공통으로** 지켜야 할 규칙을 정리한 인수인계 문서입니다.
 `.claude/`, `.grok/`, `.codex/` 폴더의 에이전트별 문서는 이 문서를 기본으로 삼고, 도구별 특이사항만 추가로 기술합니다.
 
-## 1. 저장소 개요
+## 현재 과정 기준 (2026-11-23 사용자 요청)
+
+- Next.js 한 프레임워크만 학습한다. 다른 프레임워크와 비교·통합하지 않는다. 아래의 초기 기록보다 이 절과 최신 사용자 요청이 우선한다.
+- 루트 학습 문서는 `study0.md`~`study18.md`, `studyMidpoint.md`, `studyFinal.md`의 21개다. 모든 학습 파일명은 study로 시작한다.
+- 각 문서는 목표·이론·전체 코드와 줄별 설명·연동·오류·연습 2~3개·빈 체크리스트·다음 단계의 8개 구성을 유지한다.
+- `demo`는 기초 v1 로그인 게시판(`/board`), `project`는 문서·AI 작업실(`/workbench`)을 확장한다. 기존 JSON `/posts`와 SQLite `/notes`는 이전 실습 기록으로 보존한다.
+- 기능 원본은 `tsx_version/project/src/course`다. `scripts/sync-course.mjs`, `scripts/configure-course.mjs`, `scripts/sync-support.mjs`로 JSX·TSX를 맞춘다. demo의 Repository는 기초 SQLite로 제한하고 심화 HTTP는 project의 entry에서 연결한다.
+- 문서 원본 데이터는 `scripts/course-chapters.mjs`이며 `scripts/generate-study.mjs`로 실제 코드와 함께 생성한다. `scripts/verify-study.mjs`가 문서 구성·연습 수·코드 해시·원문 체크를 검사한다.
+- 노션 반영표는 `docs/notion-coverage.json`, 실검증 결과는 `docs/validation.md`다. mock·코드 준비·실계정·운영 검증을 구분한다.
+- 문서·코드 검증 후 노션을 갱신한다. 커밋은 아래 COMMIT_GUIDE의 번호별 분리 규칙을 유지하고 midpoint는 study10 뒤, final은 study18 뒤에 둔다.
+- `npm run lint`, `npm test`, `npm run build`, `npm run test:http`를 각 앱에서 확인한다. Next.js 16부터 proxy 명칭을 사용한다.
+
+## 1. 저장소 개요 (초기 학습 이력)
 
 - JS / TS 기반 풀스택 엔진 [Next.js](https://nextjs.org) 학습 기록 저장소입니다. Next.js는 React 위에 **파일 기반 라우팅 + 서버 렌더링 + Route Handler(API)** 를 한 프로젝트에 붙인 프레임워크입니다.
 - 같은 워크스페이스의 `frontend_study/react/`(클라이언트 SPA)와 `backend_study/nest.js/`(API 서버)를 이미 다룬 전제에서, **그 둘을 한 저장소에서 어떻게 합치는지**를 배우는 것이 목표입니다. 나중에 Nest/Django API로 백엔드를 분리해도 되는 구조를 염두에 둡니다.

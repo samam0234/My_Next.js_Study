@@ -1,6 +1,2 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "standalone",
-};
-
+const nextConfig = { output: "standalone", serverExternalPackages: ["pg", "mysql2", "mongodb"], async headers() { return [{ source: "/:path*", headers: [{ key: "X-Content-Type-Options", value: "nosniff" }, { key: "Referrer-Policy", value: "same-origin" }, { key: "X-Frame-Options", value: "DENY" }] }]; } };
 export default nextConfig;
