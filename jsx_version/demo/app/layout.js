@@ -1,12 +1,6 @@
-import { Noto_Sans_KR } from "next/font/google";
 import { SiteHeader } from "@/app/ui/site-header";
 import "./globals.css";
 
-const notoSansKr = Noto_Sans_KR({
-  variable: "--font-noto",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
 
 export const metadata = {
   title: {
@@ -18,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
+    <html lang="ko" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-sans">
         <SiteHeader />
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-8">

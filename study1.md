@@ -1,204 +1,136 @@
-# study1 — 만드는 방법 및 명령어, 실습 1
+# study1 — Hello World와 JSX 기본 문법
 
-[study0.md](study0.md)에서 개념을 봤으니 이제 프로젝트를 만들고 첫 HTML을 서버에서 내려 봅니다.
-**JSX와 TSX를 같은 구조로 둘 다** 만듭니다.
+[전체 과정](README.md) · [노션 원문](https://app.notion.com/p/3d6d7dec5e2e81afb534c64042625cc6)
 
-대응하는 코드:
+## ① 목표 한 줄
 
-- TypeScript: [`tsx_version/demo`](tsx_version/demo)
-- JavaScript: [`jsx_version/demo`](jsx_version/demo)
+서버에서 첫 화면을 그리고 JSX 표현식·조건·반복을 이해한다.
 
----
+## ② 📖 이론
 
-## 1. 사전 준비
+page.tsx의 default export가 URL의 화면이다. JSX의 중괄호는 문자열, 숫자, 계산 결과를 화면에 끼우는 자리다. 속성은 className, 이벤트 이름은 onClick처럼 작성한다.
 
-```powershell
-node -v   # v24.14.0 확인
-npm -v    # 11.9.0 확인
-```
+컴포넌트 함수는 화면 조각을 반환한다. 배열은 map으로 li 목록을 만들고 각 항목에 안정적인 key를 준다. 조건식은 삼항 연산자 또는 조건부 렌더링으로 표시한다.
 
-NestJS의 Node, Spring의 JDK와 같은 역할입니다. Next.js 16은 Node 20+ 가 필요합니다.
+템플릿을 빈 편지지에 비유하면 JSX는 양식이고 중괄호는 수신인과 날짜를 적는 칸이다. 서버가 준비한 텍스트도 초기 HTML에 들어가며 브라우저 이벤트는 별도로 연결된다.
 
----
+## ③ 🛠️ 실기 — 전체 코드와 줄별 설명
 
-## 2. 프로젝트 생성 명령어
+기준: Next.js 16.4.6 App Router, Node 24.14.0. 예시는 TSX이며 JSX 버전은 같은 경로에서 타입과 확장자만 다르다. 앱은 누적 완성본이므로 현재 단계의 파일과 아래 구현 순서를 중심으로 읽는다. 기존 코드를 복제해 중첩 프로젝트를 생성하지 않는다.
 
-이미 Git 저장소인 이 폴더 안에서 생성하므로 **`--disable-git`** 을 붙입니다. 안 붙이면 `demo/` 안에 중첩 `.git`이 생깁니다.
+1. demo를 실행하고 /lab에서 Hello, Next.js!를 확인한다.
+2. page의 제목을 바꾸고 저장해 Fast Refresh가 결과를 반영하는지 본다.
+3. 개발자도구 Elements에서 h1과 버튼을, Network에서 문서와 /api/hello 응답을 확인한다.
+4. 서버 로그는 터미널에서, 브라우저 이벤트 로그는 개발자도구 Console에서 확인한다. 서버 출력과 브라우저 출력을 구분한다.
 
-### TypeScript (기본값)
-
-```powershell
-npx -y create-next-app@16.3.5 tsx_version/demo --ts --tailwind --eslint --app --import-alias "@/*" --use-npm --disable-git --yes
-```
-
-### JavaScript
-
-```powershell
-npx -y create-next-app@16.3.5 jsx_version/demo --js --tailwind --eslint --app --import-alias "@/*" --use-npm --disable-git --yes
-```
-
-| 옵션 | 의미 |
-|---|---|
-| `--ts` / `--js` | TypeScript 또는 JavaScript |
-| `--tailwind` | Tailwind CSS (Next 16 기본) |
-| `--eslint` | 린트 설정 |
-| `--app` | App Router (`app/` 폴더). Pages Router를 쓰지 않음 |
-| `--import-alias "@/*"` | `import x from "@/..."` 경로 별칭 |
-| `--use-npm` | 패키지 매니저를 npm으로 고정 |
-| `--disable-git` | 하위 폴더에 `.git`을 만들지 않음 |
-| `--yes` | 나머지 질문을 기본값으로 |
-
-`--src-dir`는 넣지 않았습니다. `demo/`는 `app/`이 프로젝트 루트에 바로 있습니다. `src/` 구조는 최종 프로젝트(`studyFinal`)에서 일부러 다르게 씁니다.
-
-이 저장소를 처음 받은 사람은 생성 명령을 다시 돌릴 필요 없습니다. 아래만 하면 됩니다.
-
-```powershell
+~~~powershell
 cd tsx_version/demo
-npm install
 npm run dev
-```
+# 다른 터미널
+curl.exe -i http://localhost:3000/api/hello
+curl.exe -s http://localhost:3000/lab
+~~~
 
----
+### 문법을 직접 바꾸기
 
-## 3. 생성된 구조 (핵심만)
+/lab의 return 안에서 {1 + 2}, {true ? "표시" : "숨김"}, {["라우팅", "컴포넌트"].map(item => <p key={item}>{item}</p>)}를 각각 넣어 결과를 본다. 문자열로 넣은 HTML은 텍스트로 표시되며 실행되지 않는다. 태그는 하나의 부모나 Fragment로 감싼다. 정상 응답은 200과 JSON의 data.message이다.
 
-```
-demo/
-├─ app/
-│  ├─ layout.tsx   (JS: layout.js)   ← 루트 레이아웃. <html> <body>
-│  ├─ page.tsx     (JS: page.js)     ← URL `/`
-│  └─ globals.css                    ← Tailwind 진입점
-├─ public/                           ← 정적 파일. URL `/파일명`
-├─ package.json
-├─ next.config.ts  (JS: next.config.mjs)
-└─ tsconfig.json   (JS: jsconfig.json)
-```
+### tsx_version/demo/app/lab/page.tsx
 
-Next.js는 JSX가 들어 있어도 JS 버전 파일명을 `page.js`로 둡니다. `.jsx`로 바꿔도 동작하지만, 스캐폴드 기본값을 그대로 따릅니다.
+[실행 파일](tsx_version/demo/app/lab/page.tsx)
 
-### package.json 주요 스크립트
+아래는 실제 저장된 파일 전체다. 공용 모듈의 import는 링크한 파일과 package-lock.json의 설치 결과를 사용한다.
 
-| 명령 | 역할 |
+<!-- source:tsx_version/demo/app/lab/page.tsx sha256:11f3432f03fcd2c48e97467de26eebd43db7c66ca95754eea8105f25ff955407 -->
+~~~tsx
+import { Counter } from '@/course/counter';
+import { Draft } from '@/course/draft';
+export default function Lab() { const topic = 'Next.js'; return <section className="course"><h1>Hello, {topic}!</h1><p>app 폴더와 page 파일이 URL을 만듭니다.</p><Counter label="클릭" initial={3} /><Draft /><a href="/board">게시판으로</a></section>; }
+~~~
+
+줄 번호는 위 코드 블록의 첫 줄부터 센다. 빈 줄은 설명 표에서 제외한다.
+
+| 줄 | 설명 |
 |---|---|
-| `npm run dev` | 개발 서버. 파일 저장 시 즉시 반영. 기본 `http://localhost:3000` |
-| `npm run build` | 프로덕션 빌드 (`.next/`) |
-| `npm run start` | 빌드 결과로 서버 실행. `build` 이후 |
-| `npm run lint` | ESLint |
+| 1 | 외부 모듈 또는 공용 함수·타입을 가져온다: { Counter } from '@/course/counter'; |
+| 2 | 외부 모듈 또는 공용 함수·타입을 가져온다: { Draft } from '@/course/draft'; |
+| 3 | 현재 구문에서 다음 값·인자·표현식을 연결한다: export default function Lab() { const topic = 'Next.js'; return <section className="course"><h1>Hello, {topic}!</h1><p>app 폴더와 page 파일이 URL을 만듭니다.</p><Counter label="클릭" initial={3} /><Draft /><a href="/board">게시판으로</a></section>; } |
 
-두 버전을 동시에 띄울 때:
+### tsx_version/demo/course/counter.tsx
 
-```powershell
-# 터미널 1
-cd tsx_version/demo; npm run dev
-# 터미널 2
-cd jsx_version/demo; npm run dev -- --port 3001
-```
+[실행 파일](tsx_version/demo/course/counter.tsx)
 
-Vite의 `npm run dev`(보통 5173)와 같고, Nest의 `npm run start:dev`에 대응합니다. 차이는 **이 서버가 HTML과 API를 같이** 준다는 점입니다.
+아래는 실제 저장된 파일 전체다. 공용 모듈의 import는 링크한 파일과 package-lock.json의 설치 결과를 사용한다.
 
----
-
-## 4. `layout`과 `page`
-
-### 루트 레이아웃
-
-`app/layout.tsx`는 모든 페이지를 감쌉니다. `<html>`과 `<body>`는 여기에만 둡니다.
-
-```tsx
-import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
-import Link from "next/link";
-import "./globals.css";
-
-const notoSansKr = Noto_Sans_KR({
-  variable: "--font-noto",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
-
-export const metadata: Metadata = {
-  title: "Next.js 실습 데모",
-  description: "App Router 기초부터 게시판·로그인까지 한 프로젝트에서 실습합니다.",
-};
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
+<!-- source:tsx_version/demo/course/counter.tsx sha256:492173c605e14cd8ac2692d6aefe55fee70171a0f96df2a7b0750c993b69c183 -->
+~~~tsx
+"use client";
+import { useState } from "react";
+export function Counter({
+  label,
+  initial = 0,
+}: {
+  label: string;
+  initial?: number;
+}) {
+  const [count, setCount] = useState(initial);
   return (
-    <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">
-        <header>...</header>
-        <main>{children}</main>
-        <footer>...</footer>
-      </body>
-    </html>
+    <button onClick={() => setCount((n) => n + 1)}>
+      {label}: {count}
+    </button>
   );
 }
-```
+~~~
 
-JSX 버전은 `LayoutProps`, `Metadata` 타입만 없고 파일명이 `layout.js`입니다. `children`은 그냥 props로 받습니다.
+줄 번호는 위 코드 블록의 첫 줄부터 센다. 빈 줄은 설명 표에서 제외한다.
 
-- `export const metadata` — 탭 제목, 검색 엔진/카톡 미리보기에 쓰입니다. `study9`에서 페이지별로 세분화합니다.
-- `next/font` — 구글 폰트를 빌드 타임에 받아와 **런타임에 Google로 나가지 않습니다**.
-- `{children}` — 지금 URL의 `page`가 여기로 들어옵니다. React Router의 `<Outlet />`과 같습니다.
+| 줄 | 설명 |
+|---|---|
+| 1 | 이 모듈과 하위 import를 브라우저 상호작용 경계로 선언한다. |
+| 2 | 외부 모듈 또는 공용 함수·타입을 가져온다: { useState } from "react"; |
+| 3 | Counter의 입력·반환 경계를 정의한다. |
+| 4 | 현재 구문에서 다음 값·인자·표현식을 연결한다: label, |
+| 5 | 현재 구문에서 다음 값·인자·표현식을 연결한다: initial = 0, |
+| 6 | 현재 구문에서 다음 값·인자·표현식을 연결한다: }: { |
+| 7 | 객체·스키마·속성의 값을 지정한다: label: string; |
+| 8 | 현재 구문에서 다음 값·인자·표현식을 연결한다: initial?: number; |
+| 9 | 현재 구문에서 다음 값·인자·표현식을 연결한다: }) { |
+| 10 | 브라우저 상태·렌더와 무관한 값·수명에 따른 연결 정리를 설정한다. |
+| 11 | 현재 함수의 처리 결과를 호출자 또는 화면에 반환한다: return ( |
+| 12 | 이벤트 또는 요청 결과를 상태 setter에 반영해 화면을 갱신한다: <button onClick={() => setCount((n) => n + 1)}> |
+| 13 | 현재 구문에서 다음 값·인자·표현식을 연결한다: {label}: {count} |
+| 14 | JSX로 화면·레이블·입력·조건부 내용을 구성한다: </button> |
+| 15 | 열었던 블록·객체·배열·호출 또는 JSX 표현식을 닫는다. |
+| 16 | 열었던 블록·객체·배열·호출 또는 JSX 표현식을 닫는다. |
 
-### 홈 페이지
+## ④ 🔗 연동 포인트
 
-`app/page.tsx`가 `/`입니다. `"use client"`가 없으므로 **서버 컴포넌트**입니다.
+page가 데이터와 초기 props를 준비하고 Counter가 클릭을 처리한다. Fast Refresh와 개발자도구로 확인한 방식은 이후 API 폼 디버깅에도 그대로 쓴다.
 
-```tsx
-export default function HomePage() {
-  const renderedAt = new Date().toISOString();
-  return <p>renderedAt = {renderedAt}</p>;
-}
-```
+## ⑤ 오류 노트
 
-`new Date()`는 서버에서 실행됩니다. 페이지 소스를 보기(Ctrl+U)하면 그 시각 문자열이 **이미 HTML에 박혀** 있습니다. Vite SPA는 빈 `<div id="root">`만 주고 JS가 그린 뒤에야 내용이 생깁니다.
-
----
-
-## 5. 실습에서 바꾼 것
-
-`create-next-app` 기본 템플릿(영문 랜딩, Vercel 링크)을 지우고 강의용 홈으로 교체했습니다.
-
-1. `lang="ko"`, Noto Sans KR
-2. 공통 헤더/푸터를 루트 레이아웃에 배치 (`next/link`의 `<Link>`)
-3. 홈에 서버에서 만든 `renderedAt`을 표시
-4. 라이트 톤 배경(`globals.css`) — 이후 실습 UI의 기준
-
-`<Link>`는 브라우저 전체를 새로고침하지 않고 App Router 안에서 이동합니다. 지금은 홈 하나라 티가 안 나고, `study2`에서 페이지가 늘어나면 차이가 보입니다.
-
----
-
-## 6. 실행해서 확인
-
-```powershell
-cd tsx_version/demo
-npm run dev
-```
-
-브라우저: `http://localhost:3000`
-
-확인 포인트:
-
-- 제목 "Next.js에 오신 것을 환영합니다"
-- 검은 박스의 `renderedAt`이 ISO 시각
-- 새로고침하면 시각이 바뀜 (SSR)
-- 페이지 소스 보기에도 `renderedAt` 문자열이 있음 (클라이언트가 나중에 넣은 게 아님)
-
-```powershell
-curl.exe -s http://localhost:3000 | findstr renderedAt
-```
-
-HTML 안에 `renderedAt = 2026-...`가 보이면 서버 렌더링이 된 것입니다.
-
----
-
-## 7. JSX와 TSX 차이 (이번 실습)
-
-| | TSX | JSX |
+| 증상 | 원인 | 해결 |
 |---|---|---|
-| 페이지 | `app/page.tsx` | `app/page.js` |
-| 레이아웃 | `LayoutProps<"/"`, `Metadata` | 타입 없음 |
-| 설정 | `next.config.ts`, `tsconfig.json` | `next.config.mjs`, `jsconfig.json` |
-| 화면 | 동일 | 동일 |
+| Adjacent JSX elements | 부모 없이 여러 태그 반환 | 부모 section 또는 Fragment로 감싼다 |
+| 화면이 갱신되지 않음 | 다른 앱·포트를 보고 있음 | 터미널 경로와 브라우저 URL 확인 |
+| key 경고 | map 항목의 식별자 없음 | 항목 고유 id를 key로 지정 |
 
-다음: [study2.md](study2.md) — `/about`, `/hello/[name]`, 게시글 목록 뼈대와 `Link`로 페이지를 연결합니다.
+## ⑥ 직접 해보기
+
+1. 이름 변수를 만들고 환영 문장을 표시한다.
+2. 학습 주제 세 개를 map으로 렌더링한다.
+3. 조건에 따라 시작 안내를 표시하고 Network의 200 응답을 확인한다.
+
+## ⑦ ☐ 체크리스트
+
+- [ ] JSX 중괄호와 태그를 구분한다.
+- [ ] 조건과 반복 결과를 표시했다.
+- [ ] Fast Refresh와 개발자도구로 결과를 확인했다.
+
+문서 제공과 학습자의 직접 수행은 다르므로 연습 체크는 비워 둔다. 실제 검증 증거는 [검증 기록](docs/validation.md)에서 확인한다.
+
+## ⑧ 다음 단계 연결
+
+[study2](study2.md)에서 페이지·컴포넌트·모듈을 나누고 props와 이벤트로 연결한다.
+
+공식 기준: [Next.js 문서](https://nextjs.org/docs/app), [설치 버전의 가이드](tsx_version/project/node_modules/next/dist/docs/01-app/01-getting-started/05-server-and-client-components.md). 상세 외부 API 출처는 [README](README.md)의 참고 링크를 따른다.
