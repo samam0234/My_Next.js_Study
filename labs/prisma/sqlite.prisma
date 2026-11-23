@@ -1,0 +1,13 @@
+// Prisma 6 학습용 모델. 실제 앱은 repository.ts의 드라이버를 사용한다.
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model CourseState {
+  id       Int    @id
+  data     String
+  revision Int    @default(0)
+}

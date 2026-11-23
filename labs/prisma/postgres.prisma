@@ -1,0 +1,12 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model CourseState {
+  id       Int    @id
+  data     String @db.Text
+  revision Int    @default(0)
+}

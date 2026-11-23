@@ -1,0 +1,12 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+model CourseState {
+  id       String @id @map("_id")
+  data     String
+  revision Int    @default(0)
+}

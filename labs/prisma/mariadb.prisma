@@ -1,0 +1,12 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model CourseState {
+  id       Int    @id
+  data     String @db.LongText
+  revision Int    @default(0)
+}
