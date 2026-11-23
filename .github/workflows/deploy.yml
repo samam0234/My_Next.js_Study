@@ -1,0 +1,35 @@
+name: Next.js 수동 배포
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.0
+      - run: npm ci && npm test && npm run build
+        working-directory: tsx_version/project
+      - name: Docker 이미지 생성
+        run: docker build -t next-study:${{ github.sha }} tsx_version/project
+      - name: 서버 신원 확인 및 배포
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          test -n "$DEPLOY_HOST" && test -n "$DEPLOY_USER" && test -n "$DEPLOY_KEY" && test -n "$DEPLOY_KNOWN_HOSTS"
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          docker save next-study:${{ github.sha }} | ssh "$DEPLOY_USER@$DEPLOY_HOST" 'docker load'
+          ssh "$DEPLOY_USER@$DEPLOY_HOST" 'cd /opt/next-study && ./deploy.sh' -- '${{ github.sha }}'

@@ -1,0 +1,60 @@
+services:
+  app:
+    profiles: [app]
+    build: .
+    ports: ["127.0.0.1:3000:3000"]
+    env_file: .env.local
+    volumes: [course-data:/app/data]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  worker:
+    profiles: [tasks]
+    build:
+      context: .
+      target: worker
+    env_file: .env.local
+    volumes: [course-data:/app/data]
+  postgres:
+    profiles: [postgres]
+    image: postgres:17
+    environment:
+      POSTGRES_USER: study
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD를 설정하세요}
+      POSTGRES_DB: next_study
+    ports: ["127.0.0.1:55432:5432"]
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U study -d next_study"]
+      interval: 5s
+      retries: 20
+  mariadb:
+    profiles: [mariadb]
+    image: mariadb:11
+    environment:
+      MARIADB_USER: study
+      MARIADB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD를 설정하세요}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD를 설정하세요}
+      MARIADB_DATABASE: next_study
+    ports: ["127.0.0.1:53306:3306"]
+    volumes: [maria-data:/var/lib/mysql]
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 5s
+      retries: 20
+  mongodb:
+    profiles: [mongodb]
+    image: mongo:8
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: study
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD를 설정하세요}
+    ports: ["127.0.0.1:57017:27017"]
+    volumes: [mongo-data:/data/db]
+volumes:
+  course-data:
+  postgres-data:
+  maria-data:
+  mongo-data:

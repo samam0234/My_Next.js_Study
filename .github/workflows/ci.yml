@@ -1,0 +1,31 @@
+name: Next.js 학습 검증
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [tsx_version/demo, jsx_version/demo, tsx_version/project, jsx_version/project]
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.0
+          cache: npm
+          cache-dependency-path: ${{ matrix.directory }}/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: node scripts/storage-check.mjs
+      - run: npm run build
+      - run: npm run test:http
+      - run: npm audit --omit=dev --audit-level=high
