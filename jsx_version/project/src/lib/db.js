@@ -34,7 +34,7 @@ export function getDb() {
     );
   `);
   const count = db.prepare("SELECT COUNT(*) AS n FROM users").get();
-  if (count.n === 0) {
+  if (count.n === 0 && process.env.NODE_ENV !== "production") {
     db.prepare(
       "INSERT INTO users (id, email, name, password_hash) VALUES (?, ?, ?, ?)",
     ).run(

@@ -1,23 +1,6 @@
-import { NextResponse } from "next/server";
-
-const SESSION_COOKIE = "session_token";
-
-function isProtected(pathname) {
-  return pathname === "/posts/new" || /^\/posts\/[^/]+\/edit$/.test(pathname);
-}
-
+import { NextResponse } from 'next/server';
 export function proxy(request) {
-  if (!isProtected(request.nextUrl.pathname)) {
-    return NextResponse.next();
-  }
-  if (request.cookies.get(SESSION_COOKIE)?.value) {
-    return NextResponse.next();
-  }
-  const loginUrl = new URL("/login", request.url);
-  loginUrl.searchParams.set("from", request.nextUrl.pathname);
-  return NextResponse.redirect(loginUrl);
+  if (request.cookies.get('course_session')?.value) return NextResponse.next();
+  return NextResponse.redirect(new URL('/board', request.url));
 }
-
-export const config = {
-  matcher: ["/posts/new", "/posts/:id/edit"],
-};
+export const config = { matcher: ['/private-lab/:path*'] };

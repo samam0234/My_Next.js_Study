@@ -10,7 +10,9 @@ export type SessionPayload = {
 };
 
 function secret() {
-  return process.env.JWT_SECRET ?? "studylog-dev-secret";
+  const value = process.env.JWT_SECRET;
+  if (!value || value.length < 32) throw new Error("JWT_SECRET을 32자 이상 설정하세요.");
+  return value;
 }
 
 export async function hashPassword(password: string) {
